@@ -1,5 +1,5 @@
 import Prompt from "@models/prompt";
-import { ConnectionToDB } from "@utils/database";
+import { connectionToDB } from "@utils/database";
 
 
 //GET The Post that we want to delete or update
@@ -7,7 +7,7 @@ export const GET = async (request,{params}) => {
     
 
     try {
-        await ConnectionToDB();
+        await connectionToDB();
 
         const prompt =await Prompt.findById(params.id).populate('creator')
 
@@ -24,7 +24,7 @@ export const PATCH = async (request, { params }) => {
     const { prompt, tag } = await request.json();
 
     try {
-        await ConnectionToDB();
+        await connectionToDB();
 
         // Find the existing prompt by ID
         const toUpdatePost = await Prompt.findById(params.id);
@@ -50,7 +50,7 @@ export const PATCH = async (request, { params }) => {
 
 export const DELETE = async (request, { params }) => {
     try {
-        await ConnectionToDB();
+        await connectionToDB();
 
         // Find the prompt by ID and remove it
         await Prompt.findByIdAndRemove(params.id);
