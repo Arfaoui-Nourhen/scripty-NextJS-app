@@ -12,7 +12,7 @@ export const ConnectionToDB=()=>{
         return;
     }
     try {
-        mongoose.connect(`${process.env.MONGODB_URL}`,{
+        mongoose.connect(String(process.env.MONGODB_URL),{
             dbName: "script_s",
             useNewUrlParser: true ,
             useUnifiedTopology: true,
