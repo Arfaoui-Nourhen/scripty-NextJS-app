@@ -1,9 +1,7 @@
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google"
 import { ConnectionToDB } from "@utils/database";
-import dotenv from 'dotenv';
 
-dotenv.config();
 import User from "@models/user"
 const handler =NextAuth({
     providers:[

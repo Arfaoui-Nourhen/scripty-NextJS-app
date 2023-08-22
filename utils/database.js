@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
 
+dotenv.config();
 let isConnected = false ;
 
 export const ConnectionToDB=()=>{
@@ -10,7 +12,7 @@ export const ConnectionToDB=()=>{
         return;
     }
     try {
-        mongoose.connect(process.env.MONGODB_URL,{
+        mongoose.connect(`${process.env.MONGODB_URL}`,{
             dbName: "script_s",
             useNewUrlParser: true ,
             useUnifiedTopology: true,
