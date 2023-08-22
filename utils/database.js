@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
 
+dotenv.config();
 let isConnected = false ;
 
 export const ConnectionToDB=()=>{
@@ -12,7 +14,7 @@ export const ConnectionToDB=()=>{
     try {
         mongoose.connect(process.env.MONGODB_URL,{
             dbName: "script_s",
-            useNewUrlParser: true,
+            useNewUrlParser: true ,
             useUnifiedTopology: true,
         })
         console.log('connected to database sucessfuly *\/*')
