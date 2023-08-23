@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+
 let isConnected = false; // track the connection
 
 export const ConnectionToDB = async () => {
@@ -11,7 +12,7 @@ export const ConnectionToDB = async () => {
   }
 
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(process.env.MONGODB_URL, {
       dbName: "share_prompt",
       useNewUrlParser: true,
       useUnifiedTopology: true,
