@@ -20,7 +20,7 @@ const Nav = () => {
 
   return (
     <nav className='flex-between w-full mb-16 pt-3'>
-      <Link href='/' className='flex gap-2 flex-center'>
+      <Link href='/' className='flex gap-2 flex-center' prefetch>
         <Image
           src='/assets/images/logo.svg'
           alt='logo'
@@ -28,14 +28,14 @@ const Nav = () => {
           height={30}
           className='object-contain'
         />
-        <p className='logo_text'>Promptopia</p>
+        <p className='logo_text'>Scripty</p>
       </Link>
 
       {/* Desktop Navigation */}
       <div className='sm:flex hidden'>
         {session?.user ? (
           <div className='flex gap-3 md:gap-5'>
-            <Link href='/create-prompt' className='black_btn'>
+            <Link href='/create-prompt' className='black_btn' prefetch>
               Create Post
             </Link>
 
@@ -43,7 +43,7 @@ const Nav = () => {
               Sign Out
             </button>
 
-            <Link href='/profile'>
+            <Link href='/profile' prefetch>
               <Image
                 src={session?.user.image}
                 width={37}
@@ -91,6 +91,7 @@ const Nav = () => {
                   href='/profile'
                   className='dropdown_link'
                   onClick={() => setToggleDropdown(false)}
+               
                 >
                   My Profile
                 </Link>
@@ -98,6 +99,7 @@ const Nav = () => {
                   href='/create-prompt'
                   className='dropdown_link'
                   onClick={() => setToggleDropdown(false)}
+                
                 >
                   Create Prompt
                 </Link>

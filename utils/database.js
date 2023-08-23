@@ -1,27 +1,27 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
+dotenv.config();
 
-let isConnected = false; // track the connection
+let isConnected = false ;
 
-export const ConnectionToDB = async () => {
-  mongoose.set('strictQuery', true);
+export const ConnectionToDB=()=>{
 
-  if(isConnected) {
-    console.log('MongoDB is already connected');
-    return;
-  }
+    mongoose.set('strictQuery',true)
+    if(isConnected){
+        console.log('already connected to database')
+        return;
+    }
+    try {
+        mongoose.connect(process.env.MONGODB_URL,{
+            dbName:'script_s',
+            useNewUrlParser:true,
+            useUnifiedTopology:true,
+        })
+        console.log('connected to database sucessfuly *\/*')
+        isConnected=true;
+    } catch (error) {
+        console.log(error.message)
+    }
 
-  try {
-    await mongoose.connect(process.env.MONGODB_URL, {
-      dbName: "share_prompt",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-
-    isConnected = true;
-
-    console.log('MongoDB connected')
-  } catch (error) {
-    console.log(error);
-  }
 }
