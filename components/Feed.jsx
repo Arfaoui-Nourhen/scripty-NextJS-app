@@ -3,17 +3,15 @@
 import { useState, useEffect } from "react";
 
 import PromptCard from "./PromptCard";
-import {  useRouter } from "next/navigation";
 
-const PromptCardList = ({ data , handleTagClick ,handleUserCheckProfile}) => {
+const PromptCardList = ({ data, handleTagClick }) => {
   return (
     <div className='mt-16 prompt_layout'>
-      {data.map((p) => (
+      {data.map((post) => (
         <PromptCard
-          key={p._id}
-          post={p}
+          key={post._id}
+          post={post}
           handleTagClick={handleTagClick}
-          handleUserCheckProfile={handleUserCheckProfile} 
         />
       ))}
     </div>
@@ -21,13 +19,13 @@ const PromptCardList = ({ data , handleTagClick ,handleUserCheckProfile}) => {
 };
 
 const Feed = () => {
-  const router = useRouter()
   const [allPosts, setAllPosts] = useState([]);
 
   // Search states
   const [searchText, setSearchText] = useState("");
-  const [filteredData, setFiltredData] = useState([]);
- 
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  const [searchedResults, setSearchedResults] = useState([]);
+
   const fetchPosts = async () => {
     const response = await fetch("/api/prompt");
     const data = await response.json();
@@ -39,36 +37,34 @@ const Feed = () => {
     fetchPosts();
   }, []);
 
- const filterPromptsFunction=(searchText)=>{
-  const regex = new RegExp(searchText , "i")
-  return allPosts.filter(
-    (el) =>
-    regex.test(el.creator.username) || regex.test(el.tag)  ||  regex.test(el.prompt ) 
-  )
- }
+  const filterPrompts = (searchtext) => {
+    const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
+    return allPosts.filter(
+      (item) =>
+        regex.test(item.creator.username) ||
+        regex.test(item.tag) ||
+        regex.test(item.prompt)
+    );
+  };
 
- const handleUserCheckProfile=(id)=>{
-  router.push(`/profile/${id}`)
- }
-
- const TimeToTakeBeforeShowTheResult=()=>{
-  //to validate new  click
-  setSearchText('')
-  setTimeout(() => {
-    const data = filterPromptsFunction(searchText);
-    setFiltredData(data)
-  }, 5000);
-
- }
   const handleSearchChange = (e) => {
-    setSearchText(e.target.value)
-     TimeToTakeBeforeShowTheResult()
+    clearTimeout(searchTimeout);
+    setSearchText(e.target.value);
+
+    // debounce method
+    setSearchTimeout(
+      setTimeout(() => {
+        const searchResult = filterPrompts(e.target.value);
+        setSearchedResults(searchResult);
+      }, 500)
+    );
   };
 
   const handleTagClick = (tagName) => {
-    setSearchText(tagName)
-    TimeToTakeBeforeShowTheResult()
+    setSearchText(tagName);
 
+    const searchResult = filterPrompts(tagName);
+    setSearchedResults(searchResult);
   };
 
   return (
@@ -84,13 +80,15 @@ const Feed = () => {
         />
       </form>
 
-      {searchText ? 
-        (
-         <PromptCardList data={filteredData} handleTagClick={handleTagClick} handleUserCheckProfile={handleUserCheckProfile}/>):(
-         <PromptCardList data={allPosts} handleTagClick={handleTagClick} handleUserCheckProfile={handleUserCheckProfile}/>
+      {/* All Prompts */}
+      {searchText ? (
+        <PromptCardList
+          data={searchedResults}
+          handleTagClick={handleTagClick}
+        />
+      ) : (
+        <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
       )}
-       
-   
     </section>
   );
 };

@@ -10,29 +10,26 @@ const CreatePrompt = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitting, setIsSubmitting] = useState(false);
   const [post, setPost] = useState({ prompt: "", tag: "" });
-
-
 
   const createPrompt = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-        const response = await fetch("/api/prompt/new", {
-            method: "POST",
-            body: JSON.stringify({
-              prompt: post.prompt,
-              userId: session?.user.id,
-              tag: post.tag,
-            }),
-          });
-    
+      const response = await fetch("/api/prompt/new", {
+        method: "POST",
+        body: JSON.stringify({
+          prompt: post.prompt,
+          userId: session?.user.id,
+          tag: post.tag,
+        }),
+      });
+
       if (response.ok) {
-          router.push("/");
-        }
-     
+        router.push("/");
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -45,7 +42,7 @@ const CreatePrompt = () => {
       type='Create'
       post={post}
       setPost={setPost}
-      submitting={isSubmitting}
+      submitting={submitting}
       handleSubmit={createPrompt}
     />
   );
